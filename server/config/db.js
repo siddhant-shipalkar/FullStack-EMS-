@@ -3,8 +3,16 @@ import dns from "dns";
 
 const connectDb = async () => {
   try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error("MONGODB_URI is not defined in .env");
+    const mongoUri = process.env.MONGODB_URI?.trim();
+
+    if (!mongoUri) {
+      throw new Error("MONGODB_URI is not defined in server/.env");
+    }
+
+    if (mongoUri.includes("YOUR_PASSWORD") || mongoUri.includes("<password>")) {
+      throw new Error(
+        "MONGODB_URI still contains a placeholder password. Replace 'YOUR_PASSWORD' in server/.env with your real MongoDB Atlas password."
+      );
     }
 
     dns.setServers(["8.8.8.8", "1.1.1.1"]);
@@ -17,7 +25,7 @@ const connectDb = async () => {
       console.error("Mongoose connection error:", err.message);
     });
 
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
     });

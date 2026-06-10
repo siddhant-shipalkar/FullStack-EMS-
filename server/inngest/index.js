@@ -44,7 +44,7 @@ const autoCheckOut = inngest.createFunction(
               <p style="font-size: 16px;">
                 Please make sure to check out within the next hour.
               </p>
-
+ 
               <p style="font-size: 16px;">
                 If you have any questions, please contact your administrator.
               </p>
